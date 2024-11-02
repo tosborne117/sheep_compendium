@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from main import app
+from models.models import Sheep
 
 client = TestClient(app)
 
@@ -35,3 +36,25 @@ def test_add_sheep():
     }
 
     assert client.get("/sheep/7").json() == new_sheep
+
+def test_update_sheep():
+    change_sheep = {
+        "id": 2,
+        "name": "Summer",
+        "breed": "Babydoll",
+        "sex": "ewe"
+    }
+
+    response = client.post("/sheep/2", json=change_sheep)
+
+    assert response.status_code == 201
+
+    assert response.json() == {
+        "id": 2,
+        "name": "Summer",
+        "breed": "Babydoll",
+        "sex": "ewe"
+    }
+
+
+
